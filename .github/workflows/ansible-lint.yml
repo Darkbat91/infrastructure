@@ -17,11 +17,6 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v2
 
-      - name: Add installed collections in Ansible configuration
-        run: |
-          echo '[defaults]' > ansible.cfg
-          echo 'collections_paths = ./collections' >> ansible.cfg
-
       - name: Cache dependencies
         uses: actions/cache@v2
         id: cache
@@ -33,11 +28,13 @@ jobs:
 
       - name: Install role requirements
         if: steps.cache.outputs.cache-hit != 'true'
-        run: ansible-galaxy role install -r ansible/roles/requirements.yml
+        run: ansible-galaxy role install -r ./roles/requirements.yml
+        working-directory: ./ansible
 
       - name: Install collection requirements
         if: steps.cache.outputs.cache-hit != 'true'
-        run: ansible-galaxy collection install -r ansible/roles/requirements.yml
+        run: ansible-galaxy collection install -r ./roles/requirements.yml
+        working-directory: ./ansible
 
       - name: tmp
         run: ls ansible/collections ansible/roles ansible/roles/public
