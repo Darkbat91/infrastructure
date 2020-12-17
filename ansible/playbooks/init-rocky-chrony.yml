@@ -1,12 +1,17 @@
 ---
-# Configures an IPA client for the Rocky infrastructure
-
-- name: Configure IPA client
-  hosts: ipaclients
+# Sets Up Chrony Server/Client
+# Created: @derekmpage
+# Kudos: @danielkubat  @Darkbat91
+# Fixes: @nazunalika
+- name: Rocky Chrony Runbook
+  hosts: all
   become: true
   vars_files:
-  - vars/encpass.yml
-  - vars/ipaclient.yml
+    - vars/chrony.yml
+
+  # This is to try to avoid the handler issue in pre/post tasks
+  handlers:
+    - import_tasks: handlers/main.yml
 
   pre_tasks:
     - name: Check if ansible cannot be run here
@@ -20,12 +25,9 @@
           - "not no_ansible.stat.exists"
         msg: "/etc/no-ansible exists - skipping run on this node"
 
-#    - name: Check if we can see LDAP srv records
-
-
-  roles:
-    - role: freeipa.ansible_freeipa.ipaclient
-      state: present
+  tasks:
+    - name: Configure Chrony
+      import_tasks: tasks/chrony.yml
 
   post_tasks:
     - name: Touching run file that ansible has ran here
