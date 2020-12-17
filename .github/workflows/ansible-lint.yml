@@ -41,5 +41,7 @@ jobs:
 
       - name: Ansible Lint
         uses: rocky-linux/ansible-lint-action@master
+        env:
+          GITHUB_WORKSPACE: ${{ env.GITHUB_WORKSPACE }}/ansible
         with:
           args: "--exclude .github"
