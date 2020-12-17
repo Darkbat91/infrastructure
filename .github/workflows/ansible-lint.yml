@@ -36,10 +36,7 @@ jobs:
         run: ansible-galaxy collection install -r ./roles/requirements.yml
         working-directory: ./ansible
 
-      - name: tmp
-        run: ls ansible/collections ansible/roles ansible/roles/public
-
-      - name: Ansible Lint
+      - name: Ansible Lint 
         uses: rocky-linux/ansible-lint-action@master
         with:
           targets: ./ansible
