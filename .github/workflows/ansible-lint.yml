@@ -22,10 +22,19 @@ jobs:
           echo '[defaults]' > ansible.cfg
           echo 'collections_paths = ./collections' >> ansible.cfg
 
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: ansible/collections
+          key: ${{ hashFiles('**/ansible/roles/requirements.yml') }}
+
       - name: Install role requirements
+        if: steps.cache.outputs.cache-hit != 'true'
         run: ansible-galaxy role install -r ansible/roles/requirements.yml
 
       - name: Install collection requirements
+        if: steps.cache.outputs.cache-hit != 'true'
         run: ansible-galaxy collection install -r ansible/roles/requirements.yml
 
       - name: Ansible Lint
