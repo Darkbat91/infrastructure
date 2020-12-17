@@ -17,14 +17,14 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v2
 
-#      - name: Cache dependencies
-#        uses: actions/cache@v2
-#        id: cache
-#        with:
-#          path: |
-#            ansible/collections
-#            ansible/roles/public
-#          key: ${{ hashFiles('**/ansible/roles/requirements.yml') }}
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: |
+            ansible/collections
+            ansible/roles/public
+          key: ${{ hashFiles('**/ansible/roles/requirements.yml') }}
 
       - name: Install role requirements
         if: steps.cache.outputs.cache-hit != 'true'
